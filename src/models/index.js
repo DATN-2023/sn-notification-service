@@ -38,7 +38,8 @@ const joi2MongoSchema = (joiSchema, special = {}, schemaOnly = {}, joiOnly = {})
 module.exports = container => {
   container.registerValue('ObjectId', mongoose.Types.ObjectId)
   const Notification = require('./notification.model')(joi, mongoose, { joi2MongoSchema })
-  const schemas = { Notification }
+  const Fcmtoken = require('./fcmtoken.model')(joi, mongoose, { joi2MongoSchema })
+  const schemas = { Notification, Fcmtoken }
   const schemaValidator = (obj, type) => {
     const schema = schemas[type]
     if (schema) {

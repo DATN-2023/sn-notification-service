@@ -8,10 +8,12 @@ const models = require('./models')
 const controller = require('./controller')
 const { connect } = require('./database')
 const repo = require('./repo')
+const listener = require('./listener')
 const {
   Subscriber,
   createChannel
 } = require('./queue')
+const firebaseAdmin = require('firebase-admin')
 const EventEmitter = require('events').EventEmitter
 const mediator = new EventEmitter()
 logger.d(`${name} Service`)
@@ -21,6 +23,11 @@ mediator.once('di.ready', container => {
   container.registerValue('middleware', middleware)
   container.registerValue('logger', logger)
   container.registerValue('mediator', mediator)
+  firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(config.firebaseConfig.serviceAccountPath),
+    databaseURL: config.firebaseConfig.databaseURL
+  })
+  container.registerValue('firebaseAdmin', firebaseAdmin)
   mediator.once('db.ready', async db => {
     const channel = await createChannel(config.rabbitConfig)
     const subscriber = new Subscriber(channel, config.workerConfig.queueName, config.workerConfig.exchange, config.workerConfig.exchangeType)
@@ -35,6 +42,7 @@ mediator.once('di.ready', container => {
     server.start(container).then(app => {
       logger.d('Server started at port ', app.address().port)
     })
+    listener(container)
   })
   connect(container, mediator)
 })

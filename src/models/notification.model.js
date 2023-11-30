@@ -10,12 +10,9 @@ module.exports = (joi, mongoose, { joi2MongoSchema, schemas }) => {
   const notificationJoi = joi.object({
     user: joi.string().required(),
     alertUser: joi.string().required(),
-    type: joi.number().valid(...typeConfig.values).required(),
-    endpoint: joi.string().required(),
+    type: joi.number().valid(...Object.values(typeConfig)).required(),
     hasRead: joi.number().valid(0, 1).default(0),
-    content: joi.string().required(),
-    feed: joi.string().default('').allow(''),
-    comment: joi.string().default('').allow('')
+    targetId: joi.string().required()
   })
   const notificationSchema = joi2MongoSchema(notificationJoi, {
     user: {
@@ -24,7 +21,7 @@ module.exports = (joi, mongoose, { joi2MongoSchema, schemas }) => {
     alertUser: {
       type: ObjectId
     },
-    feed: {
+    targetId: {
       type: ObjectId
     }
   }, {
@@ -35,6 +32,9 @@ module.exports = (joi, mongoose, { joi2MongoSchema, schemas }) => {
   })
   notificationSchema.statics.validateObj = (obj, config = {}) => {
     return notificationJoi.validate(obj, config)
+  }
+  notificationSchema.statics.getConfig = () => {
+    return { typeConfig }
   }
   notificationSchema.statics.validateTaiLieu = (obj, config = {
     allowUnknown: true,

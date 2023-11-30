@@ -2,9 +2,15 @@ module.exports = container => {
   const subscriber = container.resolve('subscriber')
   const logger = container.resolve('logger')
   const mediator = container.resolve('mediator')
+  const firebaseAdmin = container.resolve('firebaseAdmin')
+  const { notificationRepo } = container.resolve('repo')
   const {
-    schemaValidator
+    schemaValidator,
+    schemas: {
+      Notification
+    }
   } = container.resolve('models')
+  const { typeConfig } = Notification.getConfig()
   const jobs = []
   const EVENT_NAME = 'nextjob'
   mediator.on(EVENT_NAME, async () => {
@@ -23,10 +29,52 @@ module.exports = container => {
     }, 500)
   })
 
+  const handleMessageNoti = (message) => {
+    const fcmToken = ''
+    switch (message.type) {
+      case typeConfig.COMMENT:
+        const payload = {
+          token: fcmToken || '',
+          notification: {
+            title: `Thông báo từ EGOSNET`,
+            body: `Bình luận về bài viết của bạn`
+          },
+          data: {
+            targetId: `${message.targetId}`,
+            type: `${message.type}`
+          }
+        }
+        return payload
+      default:
+        return
+    }
+  }
+
+  const handleMessage = async (message) => {
+    const {
+      error,
+      value
+    } = await schemaValidator(message, 'Notification')
+    if (error) {
+      logger.e(error)
+    }
+    const notification = await notificationRepo.addNotification(value)
+    const payload = handleMessageNoti(notification)
+    await pushFcm(payload)
+  }
+
+  const pushBatchFcm = async (messages) => {
+    return firebaseAdmin.messaging().sendEach(messages)
+  }
+  const pushFcm = async (message) => {
+    return firebaseAdmin.messaging().send(message)
+  }
+
   const handle = async (msg) => {
     try {
       const message = JSON.parse(msg.content.toString('utf8'))
       logger.d('message: ', message)
+      await handleMessage(message)
       subscriber.ack(msg)
       setTimeout(() => {
         mediator.emit(EVENT_NAME, '')

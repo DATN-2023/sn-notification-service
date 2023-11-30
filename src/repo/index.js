@@ -1,6 +1,7 @@
 const repo = (container) => {
   const notificationRepo = require('./notificationRepo')(container)
-  return { notificationRepo }
+  const fcmtokenRepo = require('./fcmtokenRepo')(container)
+  return { notificationRepo, fcmtokenRepo }
 }
 const connect = (container) => {
   const dbPool = container.resolve('db')
