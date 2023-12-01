@@ -60,7 +60,7 @@ const workerConfig = {
   exchange: process.env.EXCHANGE || 'sn:notification',
   exchangeType: process.env.EXCHANGE_TYPE || 'direct'
 }
-const DEFAULT_GOOGLE_APPLICATION_CREDENTIALS = require.resolve('./test-1a4cc-firebase-adminsdk-zwpu2-f6fd29771f.json')
+const DEFAULT_GOOGLE_APPLICATION_CREDENTIALS = require.resolve('./test-1a4cc-firebase-adminsdk-zwpu2-9102609b1a.json')
 const firebaseConfig = {
   databaseURL: process.env.FIREBASE_DATABASE_URL || 'https://carplaplus-bcc-d6235.asia-southeast1.firebasedatabase.app',
   serviceAccountPath: process.env.GOOGLE_APPLICATION_CREDENTIALS || DEFAULT_GOOGLE_APPLICATION_CREDENTIALS

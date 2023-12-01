@@ -30,7 +30,7 @@ module.exports = container => {
   })
 
   const handleMessageNoti = (message) => {
-    const fcmToken = ''
+    const fcmToken = 'c9tDdXNafLCtdcPH8in5H8:APA91bHU15AoFTnnwIQFBUrZWTMDi1tdj2H1icDKJLSQUYvwJkRbnIK3tyamqULTCqBa6SSmXDHpj4jHqwIYJ_Dg1EIV3s_WcGeM_cw0Qg2nXJC4BQs006FN7yfk6k3gZ8NveFnbQ-1Y'
     switch (message.type) {
       case typeConfig.COMMENT:
         const payload = {
@@ -38,11 +38,11 @@ module.exports = container => {
           notification: {
             title: `Thông báo từ EGOSNET`,
             body: `Bình luận về bài viết của bạn`
-          },
-          data: {
-            targetId: `${message.targetId}`,
-            type: `${message.type}`
           }
+          // data: {
+          //   targetId: `${message.targetId}`,
+          //   type: `${message.type}`
+          // }
         }
         return payload
       default:
