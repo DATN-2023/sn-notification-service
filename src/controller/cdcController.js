@@ -9,7 +9,7 @@ module.exports = (container) => {
     }
   } = container.resolve('models')
   const { httpCode, serverHelper } = container.resolve('config')
-  const { fcmtokenRepo } = container.resolve('repo')
+  const { fcmtokenRepo, notificationRepo } = container.resolve('repo')
   const addFcmtoken = async (req, res) => {
     try {
       const thoauoc = req.body
@@ -24,6 +24,7 @@ module.exports = (container) => {
       res.status(httpCode.CREATED).send(sp)
     } catch (e) {
       logger.e(e)
+      if (e.code && e.code === 11000) return res.status(httpCode.CREATED).send({})
       res.status(httpCode.UNKNOWN_ERROR).end()
     }
   }
@@ -63,9 +64,25 @@ module.exports = (container) => {
       res.status(httpCode.UNKNOWN_ERROR).send({ ok: false })
     }
   }
+  const updateNotification = async (req, res) => {
+    try {
+      const { id } = req.params
+      const notification = req.body
+      if (id && notification) {
+        const sp = await notificationRepo.updateNotification(id, notification)
+        res.status(httpCode.SUCCESS).send(sp)
+      } else {
+        res.status(httpCode.BAD_REQUEST).end()
+      }
+    } catch (e) {
+      logger.e(e)
+      res.status(httpCode.UNKNOWN_ERROR).send({ ok: false })
+    }
+  }
   return {
     addFcmtoken,
     updateFcmtoken,
-    deleteFcmtoken
+    deleteFcmtoken,
+    updateNotification
   }
 }

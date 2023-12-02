@@ -1,11 +1,11 @@
 module.exports = (joi, mongoose, { joi2MongoSchema, schemas }) => {
   const { ObjectId } = mongoose.Types
   const firebaseUserJoi = joi.object({
-    user: joi.number().required(),
+    user: joi.string().required(),
     fcmToken: joi.string().required(),
   })
   const firebaseUserSchema = joi2MongoSchema(firebaseUserJoi, {
-    userId: {
+    user: {
       index: true,
       type: ObjectId
     },

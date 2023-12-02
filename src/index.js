@@ -9,6 +9,7 @@ const controller = require('./controller')
 const { connect } = require('./database')
 const repo = require('./repo')
 const listener = require('./listener')
+const helper = require('./helper')
 const {
   Subscriber,
   createChannel
@@ -33,6 +34,7 @@ mediator.once('di.ready', container => {
     const subscriber = new Subscriber(channel, config.workerConfig.queueName, config.workerConfig.exchange, config.workerConfig.exchangeType)
     container.registerValue('subscriber', subscriber)
     logger.d('db.ready, starting server')
+    container.registerValue('helper', helper(container))
     container.registerValue('db', db)
     container.registerValue('models', models(container))
     const repository = repo.connect(container)

@@ -5,14 +5,21 @@ module.exports = (joi, mongoose, { joi2MongoSchema, schemas }) => {
     REACT: 2,
     POST: 3,
     SHARE: 4,
-    FOLLOW: 5
+    FOLLOW: 5,
+    UNREACT: 6,
+    UNFOLLOW: 7
   }
   const notificationJoi = joi.object({
     user: joi.string().required(),
     alertUser: joi.string().required(),
     type: joi.number().valid(...Object.values(typeConfig)).required(),
     hasRead: joi.number().valid(0, 1).default(0),
-    targetId: joi.string().required()
+    feed: joi.string().allow('').default(''),
+    comment: joi.string().allow('').default(''),
+    content: joi.string().required(),
+    reactionType: joi.number().allow('').default(''),
+    reaction: joi.string().allow('').default(''),
+    followId: joi.string().allow('').default(''),
   })
   const notificationSchema = joi2MongoSchema(notificationJoi, {
     user: {
@@ -21,7 +28,13 @@ module.exports = (joi, mongoose, { joi2MongoSchema, schemas }) => {
     alertUser: {
       type: ObjectId
     },
-    targetId: {
+    feed: {
+      type: ObjectId
+    },
+    comment: {
+      type: ObjectId
+    },
+    reaction: {
       type: ObjectId
     }
   }, {

@@ -30,7 +30,7 @@ module.exports = container => {
     return Fcmtoken.find(pipe).limit(limit).skip(skip).sort(sort)
   }
   const getFcmtokenNoPaging = (pipe) => {
-    return Fcmtoken.find(pipe)
+    return Fcmtoken.find(pipe).lean()
   }
   const removeFcmtoken = (pipe) => {
     return Fcmtoken.deleteMany(pipe)

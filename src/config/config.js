@@ -14,7 +14,7 @@ const httpCode = {
 }
 
 const dbSettings = {
-  db: process.env.DB || 'hddt-customer',
+  db: process.env.DB || 'sn-notification',
   user: process.env.DB_USER || '',
   pass: process.env.DB_PASS || '',
   repl: process.env.DB_REPLS || '',
@@ -65,4 +65,7 @@ const firebaseConfig = {
   databaseURL: process.env.FIREBASE_DATABASE_URL || 'https://carplaplus-bcc-d6235.asia-southeast1.firebasedatabase.app',
   serviceAccountPath: process.env.GOOGLE_APPLICATION_CREDENTIALS || DEFAULT_GOOGLE_APPLICATION_CREDENTIALS
 }
-module.exports = { dbSettings, serverHelper: serverHelper(), serverSettings, httpCode, rabbitConfig, workerConfig, firebaseConfig }
+const urlConfig = {
+  userUrl: process.env.USER_URL || 'http://localhost:8006',
+}
+module.exports = { dbSettings, serverHelper: serverHelper(), serverSettings, httpCode, rabbitConfig, workerConfig, firebaseConfig, urlConfig }

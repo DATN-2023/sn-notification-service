@@ -7,7 +7,10 @@ module.exports = (container) => {
       Notification
     }
   } = container.resolve('models')
-  const { httpCode, serverHelper } = container.resolve('config')
+  const {
+    httpCode,
+    serverHelper
+  } = container.resolve('config')
   const { notificationRepo } = container.resolve('repo')
   const getNotificationById = async (req, res) => {
     try {
@@ -52,7 +55,7 @@ module.exports = (container) => {
         const vl = search[i]
         const pathType = (Notification.schema.path(i) || {}).instance || ''
         if (pathType.toLowerCase() === 'objectid') {
-          pipe[i] = ObjectId(vl)
+          pipe[i] = new ObjectId(vl)
         } else if (pathType === 'Number') {
           pipe[i] = +vl
         } else if (pathType === 'String' && vl.constructor === String) {
@@ -63,13 +66,18 @@ module.exports = (container) => {
       })
       const data = await notificationRepo.getNotification(pipe, perPage, skip, sort)
       const total = await notificationRepo.getCount(pipe)
+      const totalUnread = await notificationRepo.getCount({
+        ...pipe,
+        hasRead: 0
+      })
       res.status(httpCode.SUCCESS).send({
         perPage,
         skip,
         sort,
         data,
         total,
-        page
+        page,
+        totalUnread
       })
     } catch (e) {
       logger.e(e)

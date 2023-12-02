@@ -5,4 +5,6 @@ module.exports = (app, container) => {
   app.put(`${basePath}/cdc/fcmtokens/:id`, cdcController.updateFcmtoken)
   app.delete(`${basePath}/cdc/fcmtokens/:id`, cdcController.deleteFcmtoken)
   app.post(`${basePath}/cdc/fcmtokens`, cdcController.addFcmtoken)
+
+  app.put(`${basePath}/cdc/notifications/:id`, cdcController.updateNotification)
 }
