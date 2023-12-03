@@ -41,10 +41,10 @@ module.exports = container => {
         body: `${user.name} ${message.content}`
       },
       data: {
-        user: JSON.stringify(user?.data),
-        feed: message.feed.toString(),
-        comment: message.feed.toString(),
-        type: message.type.toString()
+        // user: JSON.stringify(user),
+        // feed: message.feed.toString(),
+        // comment: message.feed.toString(),
+        // type: message.type.toString()
       }
     }
   }
@@ -89,13 +89,13 @@ module.exports = container => {
       logger.e(error)
     }
     const notification = await notificationRepo.addNotification(value)
-    const data = await userHelper.getUser({ ids: message.user.toString() })
+    const { data } = await userHelper.getUser({ ids: message.user.toString() })
     const fcmTokenData = await fcmtokenRepo.getFcmtokenNoPaging({ user: new ObjectId(message.alertUser) })
-    const payload = handleMessageNoti(notification, data)
+    const payload = handleMessageNoti(notification, data[0])
     const messages = fcmTokenData.map(data => pushFcm({
       ...payload,
       token: data.fcmToken
-    }).then(values => true).catch(error => false))
+    }).then(values => values).catch(error => false))
     const results = await Promise.all(messages)
     for (const index in results) {
       if (!results[index]) await fcmtokenRepo.deleteFcmtoken(fcmTokenData[index]._id.toString())
