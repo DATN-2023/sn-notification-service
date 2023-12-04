@@ -41,10 +41,10 @@ module.exports = container => {
         body: `${user.name} ${message.content}`
       },
       data: {
-        // user: JSON.stringify(user),
-        // feed: message.feed.toString(),
-        // comment: message.feed.toString(),
-        // type: message.type.toString()
+        user: JSON.stringify(user),
+        feed: message.feed.toString(),
+        comment: message.feed.toString(),
+        type: message.type.toString()
       }
     }
   }
