@@ -88,6 +88,7 @@ module.exports = container => {
     if (error) {
       logger.e(error)
     }
+    if (value.user === value.alertUser) return
     const notification = await notificationRepo.addNotification(value)
     const { data } = await userHelper.getUser({ ids: message.user.toString() })
     const fcmTokenData = await fcmtokenRepo.getFcmtokenNoPaging({ user: new ObjectId(message.alertUser) })
