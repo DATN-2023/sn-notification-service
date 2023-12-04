@@ -30,9 +30,9 @@ module.exports = (container) => {
   }
   const deleteFcmtoken = async (req, res) => {
     try {
-      const { id } = req.params
-      if (id) {
-        await fcmtokenRepo.deleteFcmtoken(id)
+      const { fcmToken } = req.body
+      if (fcmToken) {
+        await fcmtokenRepo.removeFcmtoken({ fcmToken })
         res.status(httpCode.SUCCESS).send({ ok: true })
       } else {
         res.status(httpCode.BAD_REQUEST).end()

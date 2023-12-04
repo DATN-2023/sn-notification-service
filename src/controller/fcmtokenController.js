@@ -1,4 +1,3 @@
-
 module.exports = (container) => {
   const logger = container.resolve('logger')
   const ObjectId = container.resolve('ObjectId')
@@ -8,7 +7,10 @@ module.exports = (container) => {
       Fcmtoken
     }
   } = container.resolve('models')
-  const { httpCode, serverHelper } = container.resolve('config')
+  const {
+    httpCode,
+    serverHelper
+  } = container.resolve('config')
   const { fcmtokenRepo } = container.resolve('repo')
   const addFcmtoken = async (req, res) => {
     try {
