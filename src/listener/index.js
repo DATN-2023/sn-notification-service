@@ -56,7 +56,7 @@ module.exports = container => {
       case typeConfig.REACT:
         return 'đã bày tỏ cảm xúc về bài viết của bạn'
       case typeConfig.FOLLOW:
-        return 'đã yêu cầu theo dõi bạn'
+        return 'đã theo dõi bạn'
       default:
         return
     }
