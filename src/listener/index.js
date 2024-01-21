@@ -53,10 +53,12 @@ module.exports = container => {
     switch (message.type) {
       case typeConfig.COMMENT:
         return 'đã bình luận về bài viết của bạn'
-      case typeConfig.REACT:
+      case typeConfig.REACTFEED:
         return 'đã bày tỏ cảm xúc về bài viết của bạn'
       case typeConfig.FOLLOW:
         return 'đã theo dõi bạn'
+      case typeConfig.REACTCOMMENT:
+        return 'đã bày tỏ cảm xúc về bình luận của bạn'
       default:
         return
     }

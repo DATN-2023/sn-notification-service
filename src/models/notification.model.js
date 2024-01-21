@@ -2,12 +2,13 @@ module.exports = (joi, mongoose, { joi2MongoSchema, schemas }) => {
   const { ObjectId } = mongoose.Types
   const typeConfig = {
     COMMENT: 1,
-    REACT: 2,
+    REACTFEED: 2,
     POST: 3,
     SHARE: 4,
     FOLLOW: 5,
     UNREACT: 6,
-    UNFOLLOW: 7
+    UNFOLLOW: 7,
+    REACTCOMMENT: 8
   }
   const notificationJoi = joi.object({
     user: joi.string().required(),
